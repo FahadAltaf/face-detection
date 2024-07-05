@@ -26,10 +26,14 @@ def detect_faces(image_path):
             box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
             (x, y, x2, y2) = box.astype("int")
             w, h = x2 - x, y2 - y
-            faces.append((int(x), int(y), int(w), int(h)))  # Convert to standard Python int
-    faces = sorted(faces, key=lambda box: (box[0], box[1]))
-    faces_with_index = [{'index': idx, 'x': face[0], 'y': face[1], 'width': face[2], 'height': face[3]} for idx, face in enumerate(faces)]
-    return faces_with_index
+            faces.append({
+                'index': int(i), 
+                'x': int(x), 
+                'y': int(y), 
+                'width': int(w), 
+                'height': int(h)
+            })  # Ensure all values are standard Python ints
+    return faces
 
 @app.route(route="FaceDetectionFunction", auth_level=func.AuthLevel.FUNCTION)
 def FaceDetectionFunction(req: func.HttpRequest) -> func.HttpResponse:
