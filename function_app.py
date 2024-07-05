@@ -27,7 +27,6 @@ def detect_faces(image_path):
             (x, y, x2, y2) = box.astype("int")
             w, h = x2 - x, y2 - y
             faces.append({
-                'index': int(i), 
                 'x': int(x), 
                 'y': int(y), 
                 'width': int(w), 
@@ -35,7 +34,9 @@ def detect_faces(image_path):
             })  # Ensure all values are standard Python ints
     # Sort faces from left to right by the x-coordinate
     faces = sorted(faces, key=lambda face: face['x'])
-    return faces
+    # Assign indices after sorting
+    faces_with_index = [{'index': idx, 'x': face['x'], 'y': face['y'], 'width': face['width'], 'height': face['height']} for idx, face in enumerate(faces)]
+    return faces_with_index
 
 @app.route(route="FaceDetectionFunction", auth_level=func.AuthLevel.FUNCTION)
 def FaceDetectionFunction(req: func.HttpRequest) -> func.HttpResponse:
