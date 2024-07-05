@@ -33,6 +33,8 @@ def detect_faces(image_path):
                 'width': int(w), 
                 'height': int(h)
             })  # Ensure all values are standard Python ints
+    # Sort faces from left to right by the x-coordinate
+    faces = sorted(faces, key=lambda face: face['x'])
     return faces
 
 @app.route(route="FaceDetectionFunction", auth_level=func.AuthLevel.FUNCTION)
